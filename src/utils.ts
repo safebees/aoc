@@ -1,7 +1,7 @@
-import {createReadStream} from 'node:fs'
 
 export function getNumberFromString(n: string) {
-    return parseInt(n.match(/\d+/g).join(''));
+    const match = n.match(/\d+/g);
+    return !match ? undefined : parseInt(match.join(''));
 }
 
 export function sum(n: number[]) {
@@ -27,14 +27,22 @@ export async function readLines(filePath: string, f: (line: string, i?: number) 
 
         for (const line of lines) {
             f(line, counter);
-            if(counter === 998){
+            if (counter === 998) {
                 console.log()
             }
             counter += 1;
         }
     }
-    if(remainder){
-        f(remainder, counter+1);
+    if (remainder) {
+        f(remainder, counter + 1);
     }
     return undefined;
+}
+
+export async function readLinesToArray(filePath: string) {
+    const arr: string[] = [];
+    await readLines(filePath, line => {
+        arr.push(line);
+    });
+    return arr;
 }

@@ -3,11 +3,15 @@ import {readLines, sort} from "../../utils";
 async function main() {
     let s1: number[] = [];
     let s2: number[] = [];
-    await readLines('/Users/mac/IdeaProjects/aoc/src/2024/01/input.txt', (c, i) => {
-        let regExpMatchArray = c.match(/\d+/g);
+    await readLines('/Users/mac/IdeaProjects/aoc/src/2024/01/input.txt', (c) => {
+        const regExpMatchArray = c.match(/\d+/g);
+        if (regExpMatchArray?.length != 2) {
+            return;
+        }
         s1.push(parseInt(regExpMatchArray[0]));
         s2.push(parseInt(regExpMatchArray[1]));
     });
+
     s1 = sort(s1);
     s2 = sort(s2);
     let distance = 0;
@@ -17,6 +21,7 @@ async function main() {
     console.log(distance)
     return distance;
 }
+
 main();
 
 

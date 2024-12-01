@@ -3,8 +3,11 @@ import {readLines} from "../../utils";
 async function main() {
     let s1: number[] = [];
     let s2: number[] = [];
-    await readLines('/Users/mac/IdeaProjects/aoc/src/2024/01/input.txt', (c, i) => {
+    await readLines('/Users/mac/IdeaProjects/aoc/src/2024/01/input.txt', (c) => {
         const regExpMatchArray = c.match(/\d+/g);
+        if (regExpMatchArray?.length != 2) {
+            return;
+        }
         s1.push(parseInt(regExpMatchArray[0]));
         s2.push(parseInt(regExpMatchArray[1]));
     });
