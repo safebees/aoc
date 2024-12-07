@@ -1,6 +1,6 @@
 // matrix[y][x]
 
-import {type Direction, findIndexByChar, getCordinates} from "../../utils.ts";
+import {findIndexByChar, getCordinates} from "../../utils";
 
 let s = `.........#..................#.......#...............#..................................#.....................................#....
 ..#....................................#...#......#....................#..........................................................
@@ -133,18 +133,10 @@ let s = `.........#..................#.......#...............#..................
 ..................................................#...#.#...#.........#.#.#.......##.....##.................................#.....
 ...#..#..........................#..#...........................#...............#.....#.......#............................#......`;
 
-s = `....#.....
-.........#
-..........
-..#.......
-.......#..
-..........
-.#..^.....
-........#.
-#.........
-......#...`;
 
 let matrix = s.split('\n').map(line => line.split(''));
+
+type Direction = 'up' | 'right' | 'down' | 'left';
 
 let currentDirection: Direction = 'up';
 
@@ -178,7 +170,54 @@ function getNextDirection(d: Direction): Direction {
     return strings[strings.indexOf(d) + 1] ?? strings[0];
 }
 
+let count = 0;
 
-console.log((matrix.toString().match(/X/g) || []).length);
-console.log(41);
+function logMatrix(matrixC: string[][]) {
+    console.log(matrixC.map(x=>x.join("")).join('\n')+'\n'+'\n');
+}
 
+let matrixxxxx = s.split('\n').map(line => line.split(''));
+
+
+
+// mostly a copy of aboves code 🤮
+for (const allXCordinate of allXCordinates) {
+    let matrixC = s.split('\n').map(line => line.split(''));
+    if (matrixC[allXCordinate.y][allXCordinate.x] == '^') {
+        continue;
+    }
+    matrixC[allXCordinate.y][allXCordinate.x] = '#';
+
+    let currentCoordinate = findIndexByChar(matrixC, '^');
+
+
+    let breaker = 0;
+    let currentDirection: Direction = 'up';
+
+    while (true) {
+        let y = currentCoordinate.y;
+        let x = currentCoordinate.x;
+        const cordinates = getCordinates(x, y, currentDirection);
+        const nextEl = (matrixC[cordinates.y] ?? [])[cordinates.x];
+
+        breaker += 1;
+        if (breaker > allXCordinates.length * 8) {
+            matrixxxxx[allXCordinate.y][allXCordinate.x] = 'O';
+            break;
+        }
+
+        if (nextEl === undefined) {
+            matrixC[y][x] = 'X';
+            break;
+        } else if (nextEl === '#') {
+            currentDirection = getNextDirection(currentDirection);
+        } else {
+            matrixC[cordinates.y][cordinates.x] = '^';
+            currentCoordinate = {y: cordinates.y, x: cordinates.x};
+            matrixC[y][x] = 'X';
+        }
+    }
+}
+
+logMatrix(matrixxxxx)
+console.log(matrixxxxx.toString().match(/O/g)?.length ?? 0);

@@ -1,5 +1,7 @@
 // matrix[y][x]
 
+import {MultiMap} from "../../utils.ts";
+
 const s = `56|37
 94|13
 94|53
@@ -1379,19 +1381,6 @@ const s = `56|37
 13,51,37,36,19,29,53,12,81,86,55,39,18,22,65,91,82,73,47,74,96,24,57
 `;
 
-
-// todo utils
-class MultiMap<K, V> {
-  m = new Map<K, V[]>();
-  add(k: K, v: V) {
-    const newVar = this.get(k);
-    newVar.push(v);
-    this.m.set(k, newVar);
-  }
-  get(k: K) {
-    return this.m.get(k) ?? [];
-  }
-}
 
 const [rules, printlines] = s.split('\n\n');
 const beforeRule = new MultiMap<number, number>();

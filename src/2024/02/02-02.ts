@@ -1,3 +1,5 @@
+import {removeItem} from "../../utils.ts";
+
 let s = `75 76 77 80 82 85 84
 49 52 53 55 58 59 61 61
 54 57 60 62 66
@@ -1041,10 +1043,4 @@ function isOk(splittedline: number[]) {
     }
   }
   return false;
-}
-
-function removeItem<T>(items: T[], index: number): T[] {
-  const firstArr = items.slice(0, index);
-  const secondArr = items.slice(index + 1);
-  return [...firstArr, ...secondArr];
 }
