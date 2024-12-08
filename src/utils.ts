@@ -84,9 +84,27 @@ export function removeItem<T>(items: T[], index: number): T[] {
 }
 
 export function logMatrix(matrixC: string[][]) {
-    console.log(matrixC.map(x=>x.join("")).join('\n')+'\n'+'\n');
+    console.log(matrixC.map(x => x.join("")).join('\n') + '\n' + '\n');
 }
 
 export function getAmountChar(matrix: string[][], c: string) {
     return matrix.flatMap(s => s).filter(s => s === c).length
+}
+
+export function forEach<T>(matrix: T[][], f: (element: T, coordinate: Coordinate, index: number) => undefined) {
+    let counter = 0;
+    for (let y = 0; y < matrix.length; y++) {
+        for (let x = 0; x < matrix[y].length; x++) {
+            f(matrix[y][x], {x, y}, counter);
+            counter += 1;
+        }
+    }
+}
+
+export function replaceAll<T>(matrix: T[][], current: T, toReplace: T) {
+    forEach(matrix, (a, {x, y}) => {
+        if (a === current) {
+            matrix[y][x] = toReplace;
+        }
+    })
 }
