@@ -17,11 +17,18 @@ export function evaluate(toEval: string) {
     return new Function('return ' + toEval)();
 }
 
-export function findIndexByChar(m: string[][], s: string) {
+export function findIndexByChar(m: string[][], s: string): Coordinate {
     let find = m
         .flatMap((row, y) => row.map((cha, x) => cha === s ? {x, y} : undefined))
         .find(coord => coord !== undefined);
     return checkNotNull(find);
+}
+
+
+export function findIndicesByChar(m: string[][], s: string): Coordinate[] {
+    return m
+        .flatMap((row, y) => row.map((cha, x) => cha === s ? {x, y} : undefined))
+        .filter(coord => coord !== undefined);
 }
 
 export function checkNotNull<T>(find: T | undefined): T {
@@ -74,4 +81,12 @@ export function removeItem<T>(items: T[], index: number): T[] {
     const firstArr = items.slice(0, index);
     const secondArr = items.slice(index + 1);
     return [...firstArr, ...secondArr];
+}
+
+export function logMatrix(matrixC: string[][]) {
+    console.log(matrixC.map(x=>x.join("")).join('\n')+'\n'+'\n');
+}
+
+export function getAmountChar(matrix: string[][], c: string) {
+    return matrix.flatMap(s => s).filter(s => s === c).length
 }

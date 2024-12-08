@@ -1,6 +1,6 @@
 // matrix[y][x]
 
-import {findIndexByChar, getCordinates} from "../../utils";
+import {findIndexByChar, getAmountChar, getCordinates, logMatrix} from "../../utils";
 
 let s = `.........#..................#.......#...............#..................................#.....................................#....
 ..#....................................#...#......#....................#..........................................................
@@ -172,12 +172,7 @@ function getNextDirection(d: Direction): Direction {
 
 let count = 0;
 
-function logMatrix(matrixC: string[][]) {
-    console.log(matrixC.map(x=>x.join("")).join('\n')+'\n'+'\n');
-}
-
 let matrixxxxx = s.split('\n').map(line => line.split(''));
-
 
 
 // mostly a copy of aboves code 🤮
@@ -220,4 +215,5 @@ for (const allXCordinate of allXCordinates) {
 }
 
 logMatrix(matrixxxxx)
-console.log(matrixxxxx.toString().match(/O/g)?.length ?? 0);
+
+console.log(getAmountChar(matrixxxxx, 'O'));
