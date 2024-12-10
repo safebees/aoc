@@ -3,6 +3,12 @@ declare global {
     replaceLast(searchValue: string, replaceValue: string): string;
 
     getBetweens(start: string, end: string): string[];
+
+    remove(...start: string[]): string;
+  }
+
+  interface Array<T> {
+    sum(): number;
   }
 }
 
@@ -12,6 +18,20 @@ String.prototype.replaceLast = function(searchValue: string, replaceValue: strin
     return this;
   }
   return (this.substring(0, charpos) + replaceValue + this.substring(charpos + (searchValue.length)));
+};
+
+String.prototype.remove = function(...toRemove: string[]): string {
+  let newS: string = this;
+  for (const s of toRemove ?? []) {
+    while (newS.includes(s)) {
+      newS = newS.replace(s, '')
+    }
+  }
+  return newS;
+};
+
+Array.prototype.sum = function(): number {
+  return sum(this);
 };
 
 String.prototype.getBetweens = function(start: string, end: string): string[] {
@@ -29,7 +49,7 @@ export function getNumberFromString(n: string) {
 }
 
 export function sum(n: number[]) {
-  return n?.reduce((e1, e2) => (e1 ?? 0) + (e2 ?? 0)) ?? 0;
+  return n?.reduce((e1, e2) => (e1 || 0) + (e2 || 0)) || 0;
 }
 
 export function sort(n: number[]) {
@@ -63,6 +83,7 @@ export function checkNotNull<T>(find: T | undefined): T {
 }
 
 export type Direction = 'up' | 'right' | 'down' | 'left';
+export const allDirections: Direction[] = ['up', 'right', 'down', 'left'];
 export type Coordinate = { x: number, y: number };
 
 export function getCordinates(x: number, y: number, d: Direction): { x: number, y: number } {
@@ -76,6 +97,10 @@ export function getCordinates(x: number, y: number, d: Direction): { x: number, 
     return {x: x - 1, y: y + 0};
   }
   throw new Error();
+}
+
+export function sameCoordinate(a1: Coordinate, a2: Coordinate) {
+  return a1.x === a2.x && a1.y === a2.y;
 }
 
 export class MultiMap<K, V> {
@@ -130,4 +155,11 @@ export function replaceAll<T>(matrix: T[][], current: T, toReplace: T) {
       matrix[y][x] = toReplace;
     }
   })
+}
+
+export function distinct<T>(list: T[], f: (s: T) => unknown = (s) => s): T[] {
+  if (!list) {
+    return [];
+  }
+  return [...new Map(list.map(item => [f(item), item])).values()].filter(s => s !== undefined);
 }
