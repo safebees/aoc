@@ -163,3 +163,11 @@ export function distinct<T>(list: T[], f: (s: T) => unknown = (s) => s): T[] {
   }
   return [...new Map(list.map(item => [f(item), item])).values()].filter(s => s !== undefined);
 }
+
+export function measureTime(f: () => undefined): void {
+  const start = new Date().getTime();
+  f();
+  const end = new Date().getTime();
+  const time = end - start;
+  console.log('Execution time (ms): ' + time);
+}
