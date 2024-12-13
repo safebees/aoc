@@ -31,21 +31,38 @@ let games = s.split('\n\n').map(g => {
 
 for (const game of games) {
 
+    const allOKY = doIt(game.buttonA.y,game.buttonB.y,game.prize.y)
+
+    for (const ok of allOkY) {
+
+
+//todo better determine here from which its calvulqted
+        if(ok.price=== 3){
+         itsa the index a
+}
+
+     }
+    }
+
+    console.log((number1 / numberMax) * price);
+    console.log(priceOther * i);
+    
+}
+
+function doIt(ba1,bb1,prize1){
     let numberMin = Math.min(game.buttonA.y, game.buttonB.y);
     let numberMax = Math.max(game.buttonB.y, game.buttonA.y);
 
+    const allOk=[];
     for (let i = 0; i < game.prize.y; i++) {
-        //console.log(i);
 
         let number1 = game.prize.y - (numberMin * i);
         if (number1 > 0 && number1 % numberMax === 0) {
-
             const price = numberMax === game.buttonB.y ? 1 : 3
-            const priceOther = numberMax === game.buttonB.y ? 3 : 1
-
-            console.log((number1 / numberMax) * price);
-            console.log(priceOther * i);
+            allOk.push({ price, index1});
         }
     }
+    return allOk;
 }
+
 
