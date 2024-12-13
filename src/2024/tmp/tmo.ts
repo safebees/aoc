@@ -31,16 +31,17 @@ let games = s.split('\n\n').map(g => {
 
 for (const game of games) {
 
-    const allOKY = doIt(game.buttonA.y,game.buttonB.y,game.prize.y)
+let numberMin = Math.min(game.buttonA.y, game.buttonB.y);
+    let numberMax = Math.max(game.buttonB.y, game.buttonA.y);
+
+    const indexByB = numberMin === game.buttonB.y;
+            
+    const allOKY = doIt(numbermin,numbermax,game.prize.y)
 
     for (const ok of allOkY) {
-
-
-//todo better determine here from which its calvulqted
-        if(ok.price=== 3){
-         itsa the index a
-}
-
+        const s = indexByB ? : game.buttonA.y : game.buttonA.x
+        // todo calc
+        
      }
     }
 
@@ -50,16 +51,11 @@ for (const game of games) {
 }
 
 function doIt(ba1,bb1,prize1){
-    let numberMin = Math.min(game.buttonA.y, game.buttonB.y);
-    let numberMax = Math.max(game.buttonB.y, game.buttonA.y);
-
     const allOk=[];
     for (let i = 0; i < game.prize.y; i++) {
-
-        let number1 = game.prize.y - (numberMin * i);
-        if (number1 > 0 && number1 % numberMax === 0) {
-            const price = numberMax === game.buttonB.y ? 1 : 3
-            allOk.push({ price, index1});
+        let number1 = game.prize.y - (ba1 * i);
+        if (number1 > 0 && number1 % ba2 === 0) {
+            allOk.push({index1});
         }
     }
     return allOk;
