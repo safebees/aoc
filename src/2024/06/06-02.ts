@@ -1,6 +1,6 @@
 // matrix[y][x]
 
-import {findIndexByChar, getAmountChar, getCordinates, logMatrix} from "../../utils";
+import {findIndexByChar, getAmountChar, getCordinate, logMatrix} from "../../utils";
 
 let s = `.........#..................#.......#...............#..................................#.....................................#....
 ..#....................................#...#......#....................#..........................................................
@@ -147,7 +147,7 @@ let currentCoordinate = findIndexByChar(matrix, '^');
 while (true) {
     let y = currentCoordinate.y;
     let x = currentCoordinate.x;
-    const cordinates = getCordinates(x, y, currentDirection);
+    const cordinates = getCordinate(x, y, currentDirection);
     const nextEl = (matrix[cordinates.y] ?? [])[cordinates.x];
     if (nextEl === undefined) {
         matrix[y][x] = 'X';
@@ -192,7 +192,7 @@ for (const allXCordinate of allXCordinates) {
     while (true) {
         let y = currentCoordinate.y;
         let x = currentCoordinate.x;
-        const cordinates = getCordinates(x, y, currentDirection);
+        const cordinates = getCordinate(x, y, currentDirection);
         const nextEl = (matrixC[cordinates.y] ?? [])[cordinates.x];
 
         breaker += 1;

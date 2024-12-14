@@ -1,4 +1,4 @@
-import {allDirections, Coordinate, distinct, forEach, getCordinates, MultiMap, sameCoordinate} from '../../utils';
+import {allDirections, Coordinate, distinct, forEach, getCordinate, MultiMap, sameCoordinate} from '../../utils';
 
 let s = `6541001098012789610347890107654656710323
 7832102127643898701256521218323465891410
@@ -77,7 +77,7 @@ function doit(cordinateArray: S[], i: number, lastElements?: S[]) {
   const nextNum = i + 1;
   const allnewnumberscoordinates: S[] = multiMap.get(nextNum);
   for (const cordinateArrayElement of cordinateArray) {
-    let s1 = allnewnumberscoordinates.filter(c => allDirections.some(dir => sameCoordinate(getCordinates(cordinateArrayElement.x, cordinateArrayElement.y, dir), c)));
+    let s1 = allnewnumberscoordinates.filter(c => allDirections.some(dir => sameCoordinate(getCordinate(cordinateArrayElement.x, cordinateArrayElement.y, dir), c)));
     doit(s1, nextNum, [...lastElements, cordinateArrayElement]);
   }
 }

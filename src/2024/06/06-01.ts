@@ -1,6 +1,6 @@
 // matrix[y][x]
 
-import {type Direction, findIndexByChar, getCordinates} from "../../utils.ts";
+import {type Direction, findIndexByChar, getCordinate} from "../../utils.ts";
 
 let s = `.........#..................#.......#...............#..................................#.....................................#....
 ..#....................................#...#......#....................#..........................................................
@@ -155,7 +155,7 @@ let currentCoordinate = findIndexByChar(matrix, '^');
 while (true) {
     let y = currentCoordinate.y;
     let x = currentCoordinate.x;
-    const cordinates = getCordinates(x, y, currentDirection);
+    const cordinates = getCordinate(x, y, currentDirection);
     const nextEl = (matrix[cordinates.y] ?? [])[cordinates.x];
     if (nextEl === undefined) {
         matrix[y][x] = 'X';
