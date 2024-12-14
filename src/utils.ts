@@ -105,9 +105,10 @@ export function getNeighbourCordinates(x: number, y: number, matrix: string[][],
     const coordinates = {};
     for (const direction of allDirections) {
         let cordinate = getCordinate(x, y, direction);
-        coordinates[direction] = {value: (matrix[cordinate.y] ?? [])[cordinate.x],
+        coordinates[direction] = {
+            value: (matrix[cordinate.y] ?? [])[cordinate.x],
             ...cordinate,
-            neighbours: withNei === true ? getNeighbourCordinates(cordinate.x, cordinate.y, matrix, false): undefined
+            neighbours: withNei === true ? getNeighbourCordinates(cordinate.x, cordinate.y, matrix, false) : undefined
         }
     }
     return coordinates as Coordinates;
@@ -184,4 +185,31 @@ export function measureTime(f: () => undefined): void {
     const end = new Date().getTime();
     const time = end - start;
     console.log('Execution time (ms): ' + time);
+}
+
+
+export function splitToSequences(numArray: number[]): number[][] {
+    let e = numArray.sort((a, b) => a - b);
+    const t: number[][] = [];
+    let n: number[] = [];
+    for (let r = 0; r < e.length; ++r) {
+        if (r === 0 || e[r - 1] === e[r] - 1) {
+            n.push(e[r]);
+        } else {
+            t.push(n);
+            n = [e[r]];
+        }
+    }
+    if (n.length > 0) {
+        t.push(n);
+    }
+    return t;
+}
+
+export function groupBy<V, K>(xs: V[], f: (t: V) => K): V[][] {
+    let multiMap = new MultiMap<K, V>();
+    for (const x of xs) {
+        multiMap.add(f(x), x);
+    }
+    return Array.from(multiMap.m.values());
 }

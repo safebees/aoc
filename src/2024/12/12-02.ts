@@ -1,11 +1,11 @@
 import {
     allDirections,
     type Coordinate,
-    type Coordinates, type CoordinateValue, distinct,
+    type Coordinates, type CoordinateValue, type Direction, distinct,
     forEach,
     getCordinate,
-    getNeighbourCordinates, MultiMap,
-    sameCoordinate
+    getNeighbourCordinates, groupBy, MultiMap, removeItem,
+    sameCoordinate, sort, splitToSequences
 } from '../../utils';
 
 let s = `YYYYYYYYYYYYYYYYYYYYYYYGGGGGGGGGGGSSSSSSSSSSSSSSSSSRRRRRRRZXXXXXUUUUUUUSSRRRRRRRRRRRRRRRRRRRRRRRVVVVVSSSSSSSOOOOOOOOOOOOOOOBBPPPPPPPPPJJJJJJ
@@ -149,18 +149,17 @@ KKKKKWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWPWPPPPPEEEEEEEEEEEEEEEEEEECCCCCCCFCCOOOOO
 KKKKWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWPDDPEEEEEEEEEEEEEEEEEEEECCCCCCFCXOOOOOOOOOJJJJLLVLLVVLVLLLVVVVVMMMMMMMMZZZZZZZEELLLFFFFIIIIIIIIIII
 KKKWWWWWWWWWWWWWWWWWWWXWWWWWWWWWWWWWWWWWWWWWWWWEEEEEEEEEEEEEEEEEEECCCCCCCNOOOOOOOOOOJJJJJLVVVVVVVVVVVVVVVMMMMMMMMMMZZZZEEEEELFFIIIIIIIIIIIII`
 
-
 let matrix = s.split('\n').map(line => line.split(''));
 
-const all: Coordinate[][] = [];
-const coordinateValues: CoordinateValue[] = [];
+interface ECoordinate extends Coordinates {
+    fuucounter: number;
+    fences: { x: number, y: number, direction: Direction }[];
+    e: string;
+}
+
+const all: ECoordinate[][] = [];
 
 forEach(matrix, (e, c) => {
-
-    if (e === 'C') {
-        console.log();
-    }
-
     if (all.some(s => s.some(c1 => sameCoordinate(c1, c)))) {
         return;
     }
@@ -170,8 +169,7 @@ forEach(matrix, (e, c) => {
     }
 });
 
-function bla(c: Coordinate, element: string, coordinateValues: Coordinate[]) {
-
+function bla(c: Coordinate, element: string, coordinateValues: ECoordinate[]): ECoordinate[] {
     if (coordinateValues.some(c1 => sameCoordinate(c1, c))) {
         return coordinateValues;
     }
@@ -191,70 +189,27 @@ function bla(c: Coordinate, element: string, coordinateValues: Coordinate[]) {
     return coordinateValues;
 }
 
-
 let x = 0;
-let x2345 = 0;
 for (const allElement of all) {
 
-
-    let flatMap = allElement.flatMap(x => x.fences);
-
+    const fences = allElement.flatMap(x => x.fences);
+    const directionGroup = groupBy(fences, d => d.direction);
 
     let fenceSides = 0;
 
-    let multiMap = new MultiMap();
-    for (const flatMapElement of flatMap) {
-        multiMap.add(flatMapElement.direction, flatMapElement)
-    }
+    directionGroup.forEach((va) => {
+        const direction = va[0].direction;
+        const groupKey = (direction === 'up' || direction === 'down') ? 'y' : 'x';
+        const sequenceKey = (direction === 'up' || direction === 'down') ? 'x' : 'y';
 
-    multiMap.m.forEach((v, k) => {
-        if (k === 'up' || k === 'down') {
-            let e = groupBy(v, dd => dd.y);
-            for (const eElement of Object.values(e)) {
-                let e2 = eElement.map(s => s.x).sort();
-                fenceSides += seq(e2).length;
-            }
+        for (const eElement of groupBy(va, dd => dd[groupKey])) {
+            let sortedSequence = eElement.map(s => s[sequenceKey]).sort();
+            fenceSides += splitToSequences(sortedSequence).length;
         }
-        if (k === 'left' || k === 'right') {
-            let e = groupBy(v, dd => dd.x);
-            for (const eElement of Object.values(e)) {
-                let e1 = eElement.map(s => s.y).sort();
-                fenceSides += seq(e1).length;
-            }
-        }
-    })
+    });
 
-
-    let x1 = fenceSides * allElement.length;
-    console.log(`(${allElement[0].e}) ${allElement.length} * ${fenceSides} = ${x1}`);
-    x += x1
-}
-console.log(x)
-console.log(x2345)
-
-//854181 is wrong
-
-function seq(e, t, n, r) {
-    t = [];
-    n = [];
-    for (r = 0; r < e.length; ++r) {
-        if (!r) {
-            n.push(e[r]);
-            continue
-        }
-        if (e[r - 1] != e[r] - 1) {
-            t.push(n);
-            n = []
-        }
-        n.push(e[r])
-    }
-    t.push(n);
-    return t
+    x += fenceSides * allElement.length;
 }
 
-export function groupBy<T, K>(xs: T[], f: (t: T) => K) {
-    return xs.reduce((rv, x) => {
-        (rv[f(x)] = rv[[f(x)]] || []).push(x);
-        return rv;
-    }, {});
-};
+console.log(x);
+//844198 is ok
