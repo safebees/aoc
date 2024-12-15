@@ -83,19 +83,28 @@ export function checkNotNull<T>(find: T | undefined): T {
 }
 
 export type Direction = 'up' | 'right' | 'down' | 'left';
+export type Direction2 = '^' | '>' | 'v' | '<';
+
+const dirmap = new Map<Direction2, Direction>([
+    ['^', 'up'],
+    ['>', 'right'],
+    ['v', 'down'],
+    ['<', 'left'],
+]);
 export const allDirections: Direction[] = ['up', 'right', 'down', 'left'];
 export type Coordinate = { x: number, y: number };
 export type CoordinateValue = { x: number, y: number, value: string, neighbours: Coordinates };
 export type Coordinates = { [key in Direction]: CoordinateValue };
 
-export function getCordinate(x: number, y: number, d: Direction): { x: number, y: number } {
-    if (d === 'up') {
+export function getCordinate(x: number, y: number, d: Direction | Direction2): { x: number, y: number } {
+    let newVar = dirmap.get(d as Direction2) ?? d;
+    if (newVar === 'up') {
         return {x: x + 0, y: y - 1};
-    } else if (d === 'right') {
+    } else if (newVar === 'right') {
         return {x: x + 1, y: y + 0};
-    } else if (d === 'down') {
+    } else if (newVar === 'down') {
         return {x: x + 0, y: y + 1};
-    } else if (d === 'left') {
+    } else if (newVar === 'left') {
         return {x: x - 1, y: y + 0};
     }
     throw new Error();
@@ -212,4 +221,19 @@ export function groupBy<V, K>(xs: V[], f: (t: V) => K): V[][] {
         multiMap.add(f(x), x);
     }
     return Array.from(multiMap.m.values());
+}
+
+export function cloneMatrix<T>(xs: T[][]): T[][] {
+    return xs.map((arr) => arr.slice());
+}
+
+export function getFirstCoordinateOccurence<T>(matrix: T[][], str: T): Coordinate {
+    let coo: Coordinate;
+    forEach(matrix, (s, c) => {
+        if (s === str) {
+            coo = c;
+            return;
+        }
+    });
+    return coo;
 }
